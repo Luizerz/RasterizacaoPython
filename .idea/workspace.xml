@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="50d5b072-da57-4df0-ab10-7126abd14424" name="Changes" comment="Atualizando">
-      <change beforePath="$PROJECT_DIR$/GUI.py" beforeDir="false" afterPath="$PROJECT_DIR$/GUI.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/RasterizaReta.py" beforeDir="false" afterPath="$PROJECT_DIR$/RasterizaReta.py" afterDir="false" />
-    </list>
+    <list default="true" id="50d5b072-da57-4df0-ab10-7126abd14424" name="Changes" comment="Atualizando" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -71,7 +68,7 @@
       <option name="presentableId" value="Default" />
       <updated>1681252429471</updated>
       <workItem from="1681252430712" duration="1636000" />
-      <workItem from="1681254266003" duration="372000" />
+      <workItem from="1681254266003" duration="636000" />
     </task>
     <task id="LOCAL-00001" summary="Atualizando">
       <created>1681253187708</created>
@@ -80,7 +77,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681253187708</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Atualizando">
+      <created>1681254771576</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1681254771576</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

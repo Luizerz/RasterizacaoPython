@@ -86,11 +86,11 @@ class Tela:
             linha.draw_Reta(matriz)
 
 #Rodar
-# g = Tela()
-# g.add_Reta(Reta([[-1, -1], [1, 1]], color=(255, 0, 0)))
-# g.add_Reta(Reta([[-1, 0], [1, 0]], color=(0, 255, 0)))
-# g.add_Reta(Reta([[0, -1], [0, 1]], color=(255, 255, 0)))
-# g.add_Reta(Reta([[-1, 1], [1, -1]], color=(0, 0, 255)))
-# g.draw_Tela(matriz)
-# for matriz_desenho in matriz:
-#     mostrar(matriz_desenho)
+g = Tela()
+g.add_Reta(Reta([[-1, -1], [1, 1]], color=(255, 0, 0)))
+g.add_Reta(Reta([[-1, 0], [1, 0]], color=(0, 255, 0)))
+g.add_Reta(Reta([[0, -1], [0, 1]], color=(255, 255, 0)))
+g.add_Reta(Reta([[-1, 1], [1, -1]], color=(0, 0, 255)))
+g.draw_Tela(matriz)
+for matriz_desenho in matriz:
+    mostrar(matriz_desenho)
