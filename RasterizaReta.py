@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 
 #Mostrar fundo
 def mostrar(img):
-    plt.imshow(img, cmap='viridis', interpolation='nearest')
+    plt.imshow(img.astype("uint8"))
     plt.gca().invert_yaxis() #inverter o eixo Y que tava aparecendo errado
     plt.grid(False) #grid
     plt.show()
 
 #Declarar telas e resolução
-resolutions = [(10,10),(100, 100), (300, 300), (600, 600), (800, 600), (1920, 1080)]
+resolutions = [(10,10),(100, 100), (300, 300), (600, 600), (600, 800), (1080, 1920)]
 matriz = [np.zeros(res + (3,), dtype=np.uint8) for res in resolutions] #gera uma matriz de 0s
 
 #Realiza o calculo para redimencionar a reta em relação a resolução
@@ -84,13 +84,20 @@ class Tela:
     def draw_Tela(self, matriz):
         for linha in self.lines:
             linha.draw_Reta(matriz)
+#Cor
+azul = (0,0,255)
+vermelho = (255,0,0)
+amarelo = (255,255,0)
+verde = (0,255,0)
+branco = (255,255,255)
 
 #Rodar
 g = Tela()
-g.add_Reta(Reta([[-1, -1], [1, 1]], color=(255, 0, 0)))
-g.add_Reta(Reta([[-1, 0], [1, 0]], color=(0, 255, 0)))
-g.add_Reta(Reta([[0, -1], [0, 1]], color=(255, 255, 0)))
-g.add_Reta(Reta([[-1, 1], [1, -1]], color=(0, 0, 255)))
+g.add_Reta(Reta([(-1, -1), (1, 1)], azul))
+g.add_Reta(Reta([(-1, 0), (1, 0)],verde))
+g.add_Reta(Reta([(0, -1), (0, 1)],amarelo))
+g.add_Reta(Reta([(-1, 1), (1, -1)],vermelho))
+g.add_Reta(Reta([(-0.5, -1), (-0.5 , 1)],branco))
 g.draw_Tela(matriz)
 for matriz_desenho in matriz:
     mostrar(matriz_desenho)
