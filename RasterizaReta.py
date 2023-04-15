@@ -9,13 +9,13 @@ pontos_triang = [(-0.2, -0.6), (-0.8, -0.4), (-0.8, -0.8)]  # triangulo
 pontos_pent = [(-0.2, 0.4), (-0.45, 0.6), (-0.8, 0.55), (-0.8, 0.25), (-0.45, 0.2)]  # pentagono
 
 
-plotarX = [-0.8,-0.4,-0.4,-0.8]
-#adiciona o primeiro ponto x ao final para fechar o poligono
-plotarX.append(plotarX[0])
+# plotarX = [-0.8,-0.4,-0.4,-0.8]
+# #adiciona o primeiro ponto x ao final para fechar o poligono
+# plotarX.append(plotarX[0])
 
-plotarY = [0.8,0.8,0.4,0.4]
-#adiciona o primeiro ponto y ao final para fechar o poligono
-plotarY.append(plotarY[0])
+# plotarY = [0.8,0.8,0.4,0.4]
+# #adiciona o primeiro ponto y ao final para fechar o poligono
+# plotarY.append(plotarY[0])
 
 # Mostrar fundo
 resolutions = [(100, 100), (300, 300), (600, 600), (600, 800), (1080, 1920)]
@@ -24,17 +24,14 @@ resolutions = [(100, 100), (300, 300), (600, 600), (600, 800), (1080, 1920)]
 class Matriz:
     def __init__(self):
         self.matriz = [np.zeros(res + (3,), dtype=np.uint8) for res in resolutions]
-
+    
     def zerarMatriz(self):
         self.matriz.clear()
         self.matriz = [np.zeros(res + (3,), dtype=np.uint8) for res in resolutions]
 
-
 myMatriz = Matriz()
-
-
-# Mostrar fundo
-def mostrar(img):
+#Mostrar fundo
+def mostrar(img, px, py):
     fig, axs = plt.subplots(2, 3, figsize=(12, 8))
     axs = axs.ravel()
 
@@ -48,7 +45,7 @@ def mostrar(img):
     plt.ylim([-1, 1])
 
     # plt.plot([x1,x2..,xn],[y1,y2...,yn])
-    plt.plot(plotarX,plotarY)
+    plt.plot(px,py)
 
     plt.show()
 
@@ -195,7 +192,13 @@ class Tela:
     # Adicionar Poligono
     def add_Poligono(self, polygon):
         self.polygons.append(polygon)
-
+        
+    # Remover Reta
+    def remove_Reta(self):
+        if len(self.lines) != 0:
+            self.lines.pop()
+            myMatriz.zerarMatriz()
+    
     # Desenhar Tela
     def draw_Tela(self, matriz):
         for linha in self.lines:
@@ -227,10 +230,10 @@ quadrado = Poligono(pontos_quad, vermelho)
 hexagono = Poligono(pontos_hex, verde)
 pentagono = Poligono(pontos_pent, amarelo)
 
-quadrado.draw_poligono(myMatriz.matriz)
+# quadrado.draw_poligono(myMatriz.matriz)
 # triangulo.draw_poligono(myMatriz.matriz)
 # hexagono.draw_poligono(myMatriz.matriz)
 # pentagono.draw_poligono(myMatriz.matriz)
 
-tela.draw_Tela(myMatriz.matriz)
-mostrar(myMatriz.matriz)
+# tela.draw_Tela(myMatriz.matriz)
+# mostrar(myMatriz.matriz)
