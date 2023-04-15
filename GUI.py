@@ -77,6 +77,7 @@ tkAux = tk.IntVar(value = 0)
 notebook = ttk.Notebook(window)
 tab1 = ttk.Frame(notebook)
 tab2 = ttk.Frame(notebook)
+#TAB1
 titleLabel = ttk.Label(tab1, text = 'Rasterizar Retas', font = ("Comic Sans MS", 35, "bold"))
 inputFrame = ttk.Frame(tab1)
 input = ttk.Entry(inputFrame, textvariable=tkEntryVar, justify='center')
@@ -88,6 +89,18 @@ buttonRemoveReta = ttk.Button(addAndRemoveFrame, text = 'Remover Ultima Reta!', 
 buttonRasterizar = ttk.Button(buttonFrame, text = 'Rasterize !',command = rasterize)
 warningLabel = ttk.Label(buttonFrame, text = '')
 
+# TAB2
+titleLabelPoligono = ttk.Label(tab2, text = 'Rasterizar Poligonos', font = ("Comic Sans MS", 35, "bold"))
+inputFramePoligono = ttk.Frame(tab2)
+inputPoligono = ttk.Entry(inputFramePoligono, textvariable=tkEntryVar, justify='center')
+buttonFramePoligono = ttk.Frame(tab2)
+buttonLabelPoligono = ttk.Label(buttonFramePoligono, text = 'coloque valores entre -1 a 1', font = ("Calibri", 14, "italic"))
+addAndRemoveFramePoligono = ttk.Frame(buttonFramePoligono)
+buttonAddPoligono = ttk.Button(addAndRemoveFramePoligono, text = 'Adicionar Poligono !', command = adicionarReta)
+buttonRemovePoligono = ttk.Button(addAndRemoveFramePoligono, text = 'Remover Ultima Poligono !', command = removerReta)
+buttonRasterizarPoligono = ttk.Button(buttonFramePoligono, text = 'Rasterize !',command = rasterize)
+warningLabelPoligono = ttk.Label(buttonFramePoligono, text = '')
+
 
 #add notebook
 notebook.add(tab1, text="Rasteriza Reta")
@@ -96,15 +109,25 @@ notebook.add(tab2, text="Rasteriza Poligono")
 # define grid
 window.columnconfigure(0, weight = 1, uniform = 'a')
 window.rowconfigure(0, weight = 1, uniform='a')
+#tab1
 inputFrame.columnconfigure(0, weight = 1)
 inputFrame.rowconfigure(0, weight = 1)
 buttonFrame.rowconfigure((0,1,2,3), weight = 1)
 buttonFrame.columnconfigure((0), weight = 1)
 addAndRemoveFrame.rowconfigure(0, weight = 1, uniform = 'a')
 addAndRemoveFrame.columnconfigure((0,1), weight = 1)
+#tab2
+inputFramePoligono.columnconfigure(0, weight = 1)
+inputFramePoligono.rowconfigure(0, weight = 1)
+buttonFramePoligono.rowconfigure((0,1,2,3), weight = 1)
+buttonFramePoligono.columnconfigure((0), weight = 1)
+addAndRemoveFramePoligono.rowconfigure(0, weight = 1, uniform = 'a')
+addAndRemoveFramePoligono.columnconfigure((0,1), weight = 1)
+
 
 # grid
 notebook.grid(row=0, column=0, padx=10, pady=10)
+#tab1
 titleLabel.grid(row = 0, padx=100)
 inputFrame.grid(row = 1, sticky = 'nsew')
 buttonFrame.grid(row = 2, sticky = 'nsew')
@@ -116,6 +139,17 @@ buttonRasterizar.grid(row = 3, sticky = 'nsew', padx = 200, pady = 5)
 warningLabel.grid(row = 0, sticky = 's')
 input.grid(row = 0, sticky = 'sew', padx=150)
 
+#tab2
+titleLabelPoligono.grid(row = 0, padx=100)
+inputFramePoligono.grid(row = 1, sticky = 'nsew')
+buttonFramePoligono.grid(row = 2, sticky = 'nsew')
+addAndRemoveFramePoligono.grid(row = 2, sticky = 'nsew')
+buttonLabelPoligono.grid(row = 1, sticky = 's')
+buttonAddPoligono.grid(row = 0 ,column = 0, sticky = 'e', padx = 15, pady = 5)
+buttonRemovePoligono.grid(row = 0, column = 1, sticky = 'w', padx = 15, pady =5)
+buttonRasterizarPoligono.grid(row = 3, sticky = 'nsew', padx = 200, pady = 5)
+warningLabelPoligono.grid(row = 0, sticky = 's')
+inputPoligono.grid(row = 0, sticky = 'sew', padx=150)
 
 # run
 window.mainloop()
