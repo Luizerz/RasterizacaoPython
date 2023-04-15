@@ -1,12 +1,12 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 #Declarar pontos para plotar
 pontos_quad = [(0.8, -0.8), (0.8, -0.4), (0.4, -0.4), (0.4, -0.8)]  # quadrado
 pontos_hex = [(0.8, 0.4), (0.6, 0.6), (0.4, 0.6), (0.2, 0.4), (0.4, 0.2), (0.6, 0.2)]  # heaxagono
 pontos_triang = [(-0.2, -0.6), (-0.8, -0.4), (-0.8, -0.8)]  # triangulo
 pontos_pent = [(-0.2, 0.4), (-0.45, 0.6), (-0.8, 0.55), (-0.8, 0.25), (-0.45, 0.2)]  # pentagono
+pontos_triang_equilatero = [(1, 0), (-0.5, -0.866), (-0.5, 0.866)] #triangulo equilatero
 
 
 # plotarX = [-0.8,-0.4,-0.4,-0.8]
@@ -20,17 +20,16 @@ pontos_pent = [(-0.2, 0.4), (-0.45, 0.6), (-0.8, 0.55), (-0.8, 0.25), (-0.45, 0.
 # Mostrar fundo
 resolutions = [(100, 100), (300, 300), (600, 600), (600, 800), (1080, 1920)]
 
-
 class Matriz:
     def __init__(self):
         self.matriz = [np.zeros(res + (3,), dtype=np.uint8) for res in resolutions]
-    
+
     def zerarMatriz(self):
         self.matriz.clear()
         self.matriz = [np.zeros(res + (3,), dtype=np.uint8) for res in resolutions]
 
 myMatriz = Matriz()
-#Mostrar fundo
+
 def mostrar(img, px, py):
     fig, axs = plt.subplots(2, 3, figsize=(12, 8))
     axs = axs.ravel()
@@ -58,7 +57,7 @@ def ajustar_res(x_antigo, y_antigo, l, a):
 
 
 # Rasterizar reta
-def rasterizar(x1, y1, x2, y2, matriz_desenho):
+def rasterizar(x1, y1, x2, y2):
     lista = []
 
     dx = abs(x2 - x1)
@@ -78,18 +77,18 @@ def rasterizar(x1, y1, x2, y2, matriz_desenho):
     y = y1
 
     for i in range(steps):
-        xm, ym = produz_fragmento(x, y, matriz_desenho)
+        xm, ym = produz_fragmento(x, y)
         lista.append((xm, ym))
         x += x_inc
         y += y_inc
 
-    xm, ym = produz_fragmento(x2, y2, matriz_desenho)
+    xm, ym = produz_fragmento(x2, y2)
     lista.append((xm, ym))
 
     return lista
 
 # Produzir fragmento
-def produz_fragmento(x, y, matriz_desenho):
+def produz_fragmento(x, y):
     xm = round(x)
     ym = round(y)
     return xm, ym
@@ -106,60 +105,49 @@ class Reta:
             for i in range(len(self.pontos) - 1):
                 x1, y1 = ajustar_res(*self.pontos[i], *matriz_desenho.shape[:2])
                 x2, y2 = ajustar_res(*self.pontos[i + 1], *matriz_desenho.shape[:2])
-                pontos_rasterizados = rasterizar(x1, y1, x2, y2, matriz_desenho)
+                pontos_rasterizados = rasterizar(x1, y1, x2, y2)
                 for p in pontos_rasterizados:
                     if 0 <= p[0] < matriz_desenho.shape[0] and 0 <= p[1] < matriz_desenho.shape[1]:
                         matriz_desenho[p[0], p[1]] = self.color
 
 
 #Preencher
-def find_internal_points(matriz, cor):
-  # lista para guardar as posições horizontais
-  horizontal = []
-  # ler a matriz horizontalmente e guardar as posições internas
-  for i in range(matriz.shape[0]):
-    inside_polygon = False
-    horizontalLinha = []
-    counter = 0
-    for j in range(matriz.shape[1]):
-      if all(matriz[i][j] == cor):
-        if all(matriz[i][j + 1] == [0, 0, 0]):
-          counter += 1
-          inside_polygon = not inside_polygon
-      elif inside_polygon:
-        horizontalLinha.append((j, i))
-    if counter == 1 or counter == 0:
-      horizontalLinha.clear()
-    else:
-      for elemento in horizontalLinha:
-        horizontal.append(elemento)
-
-  # lista para guardar as posições verticais
-  vertical = []
-  # ler a matriz verticalmente e guardar as posições internas
-  for j in range(matriz.shape[1]):
-    inside_polygon = False
-    counter = 0
-    verticalColuna = []
+def preenche_poligono(matriz, cor):
+    # lista para guardar as posições horizontais
+    horizontal = []
+    # ler a matriz horizontalmente e guardar as posições internas
     for i in range(matriz.shape[0]):
-      if all(matriz[i][j] == cor):
-        counter += 1
-        inside_polygon = not inside_polygon
-      elif inside_polygon:
-        verticalColuna.append((j, i))
-    if counter == 1:
-      verticalColuna.clear()
-    else:
-      for elemento in verticalColuna:
-        vertical.append(elemento)
+        dentro = False
+        horizontalLinha = []
+        counter = 0
+        for j in range(matriz.shape[1]):
+            if all(matriz[i][j] == cor):
+                if all(matriz[i][j + 1] == [0, 0, 0]):
+                    counter += 1
+                    dentro = not dentro
+            elif dentro and (all(matriz[i][j] == cor) or
+                             (any(matriz[i][j] != [0, 0, 0]) and
+                              all(matriz[i][j] != cor) and
+                              all(matriz[i][j] != [255, 255, 255]))):
+                # encontrou outra cor, continua procurando até achar a cor original novamente
+                while j < matriz.shape[1] and (all(matriz[i][j] != cor) or
+                                               (any(matriz[i][j] != [0, 0, 0]) and
+                                                all(matriz[i][j] != cor) and
+                                                all(matriz[i][j] != [255, 255, 255]))):
+                    j += 1
+                if j < matriz.shape[1]:
+                    dentro = not dentro
+            elif dentro:
+                horizontalLinha.append((j, i))
+        if counter == 1 or counter == 0:
+            horizontalLinha.clear()
+        else:
+            for elemento in horizontalLinha:
+                horizontal.append(elemento)
 
-  # lista para guardar os pontos que coincidem em ambas as listas
-  final_list = list(set(horizontal).intersection(vertical))
-
-  # pintar os pontos internos na matriz
-  for point in horizontal:
-    matriz[point[1]][point[0]] = cor
-
+    # pintar os pontos internos na matriz
+    for point in horizontal:
+        matriz[point[1]][point[0]] = cor
 
 #Poligono
 class Poligono:
@@ -173,11 +161,11 @@ class Poligono:
             for i in range(len(self.pontos)):
                 x1, y1 = ajustar_res(*self.pontos[i], *matriz_desenho.shape[:2])
                 x2, y2 = ajustar_res(*self.pontos[(i + 1) % len(self.pontos)], *matriz_desenho.shape[:2])
-                pontos_rasterizados = rasterizar(x1, y1, x2, y2, matriz_desenho)
+                pontos_rasterizados = rasterizar(x1, y1, x2, y2)
                 for p in pontos_rasterizados:
                     if 0 <= p[0] < matriz_desenho.shape[0] and 0 <= p[1] < matriz_desenho.shape[1]:
                         matriz_desenho[p[0], p[1]] = self.color
-            find_internal_points(matriz_desenho, self.color)
+            preenche_poligono(matriz_desenho, self.color)
 
 # Tela
 class Tela:
@@ -192,20 +180,20 @@ class Tela:
     # Adicionar Poligono
     def add_Poligono(self, polygon):
         self.polygons.append(polygon)
-        
+
     # Remover Reta
     def remove_Reta(self):
         if len(self.lines) != 0:
             self.lines.pop()
             myMatriz.zerarMatriz()
-    
+
     # Desenhar Tela
     def draw_Tela(self, matriz):
         for linha in self.lines:
             linha.draw_Reta(matriz)
 
         for polygon in self.polygons:
-            polygon.draw_Poligono(matriz)
+            polygon.draw_poligono(matriz, preencher=True)
 
 
 # Cor
@@ -216,7 +204,6 @@ verde = (0, 255, 0)
 branco = (255, 255, 255)
 rosa = (255, 20, 147)
 
-# Rodar
 tela = Tela()
 # tela.add_Reta(Reta([(y1, x1), (y2, x2)], color=azul))
 # tela.add_Reta(Reta([(-1, -1), (1, 1)], color=azul))
@@ -225,15 +212,35 @@ tela = Tela()
 # tela.add_Reta(Reta([(1, -1), (-1, 1)], color=vermelho))
 # tela.add_Reta(Reta([(-1,-0.5), (1,-0.5 )], color=branco))
 
-triangulo = Poligono(pontos_triang, azul)
-quadrado = Poligono(pontos_quad, vermelho)
-hexagono = Poligono(pontos_hex, verde)
-pentagono = Poligono(pontos_pent, amarelo)
+# triangulo = Poligono(pontos_triang_equilatero, azul)
+# quadrado = Poligono(pontos_quad, vermelho)
+# hexagono = Poligono(pontos_hex, verde)
+# pentagono = Poligono(pontos_pent, amarelo)
 
-# quadrado.draw_poligono(myMatriz.matriz)
-# triangulo.draw_poligono(myMatriz.matriz)
-# hexagono.draw_poligono(myMatriz.matriz)
-# pentagono.draw_poligono(myMatriz.matriz)
+# pp = [(y1,x1),(y2,x2)...,(yn,xn)]
+# pt1 = [(0.9,-0.5), (0.5,-0.9), (0.6,0)]
+# pt2 = [(-0.4, 0.6), (-0.6,0.4), (-0.7,0.9)]
+# pq1 = [(-0.8, -0.8), (-0.6, -0.8), (-0.6, -0.6), (-0.8, -0.6)]
+# pq2 = [(0.7, 0.7), (0.9, 0.7), (0.9, 0.9), (0.7, 0.9)]
+# ph1 = [(-0.1, 0.1), (-0.3, 0.2), (-0.1, 0.3), (0.1, 0.3), (0.3, 0.2), (0.1, 0.1)]
+# ph2 = [(0.4, -0.2), (0.2, -0.4), (-0.2, -0.4), (-0.4, -0.2), (-0.2, 0), (0.2, 0)]
+#
+# triangulo1 = Poligono(pt1, azul)
+# triangulo2 = Poligono(pt2, vermelho)
+#
+# quadrado1 = Poligono(pq1, azul)
+# quadrado2 = Poligono(pq2, vermelho)
+#
+# hexagono1 = Poligono(ph1, verde)
+# hexagono2 = Poligono(ph2, amarelo)
+
+
+# tela.add_Poligono(triangulo1)
+# tela.add_Poligono(triangulo2)
+# tela.add_Poligono(quadrado1)
+# tela.add_Poligono(quadrado2)
+# tela.add_Poligono(hexagono1)
+# tela.add_Poligono(hexagono2)
 
 # tela.draw_Tela(myMatriz.matriz)
 # mostrar(myMatriz.matriz)
