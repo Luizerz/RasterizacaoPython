@@ -2,8 +2,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+#Declarar pontos para plotar
+pontos_quad = [(0.8, -0.8), (0.8, -0.4), (0.4, -0.4), (0.4, -0.8)]  # quadrado
+pontos_hex = [(0.8, 0.4), (0.6, 0.6), (0.4, 0.6), (0.2, 0.4), (0.4, 0.2), (0.6, 0.2)]  # heaxagono
+pontos_triang = [(-0.2, -0.6), (-0.8, -0.4), (-0.8, -0.8)]  # triangulo
+pontos_pent = [(-0.2, 0.4), (-0.45, 0.6), (-0.8, 0.55), (-0.8, 0.25), (-0.45, 0.2)]  # pentagono
+
+
+plotarX = [-0.8,-0.4,-0.4,-0.8]
+#adiciona o primeiro ponto x ao final para fechar o poligono
+plotarX.append(plotarX[0])
+
+plotarY = [0.8,0.8,0.4,0.4]
+#adiciona o primeiro ponto y ao final para fechar o poligono
+plotarY.append(plotarY[0])
+
 # Mostrar fundo
-resolutions = [(30, 30), (100, 100), (300, 300), (600, 600), (600, 800), (1080, 1920)]
+resolutions = [(100, 100), (300, 300), (600, 600), (600, 800), (1080, 1920)]
 
 
 class Matriz:
@@ -28,6 +43,13 @@ def mostrar(img):
         axs[i].set_title(f"{resolutions[i][0]}x{resolutions[i][1]}")
         axs[i].invert_yaxis()
     plt.tight_layout()
+
+    plt.xlim([-1, 1])
+    plt.ylim([-1, 1])
+
+    # plt.plot([x1,x2..,xn],[y1,y2...,yn])
+    plt.plot(plotarX,plotarY)
+
     plt.show()
 
 
@@ -195,30 +217,20 @@ rosa = (255, 20, 147)
 tela = Tela()
 # tela.add_Reta(Reta([(y1, x1), (y2, x2)], color=azul))
 # tela.add_Reta(Reta([(-1, -1), (1, 1)], color=azul))
-tela.add_Reta(Reta([(0, -1), (0, 1)], color= rosa))
-tela.add_Reta(Reta([(-1, 0), (1, 0)], color= rosa))
+# tela.add_Reta(Reta([(0, -1), (0, 1)], color= rosa))
+# tela.add_Reta(Reta([(-1, 0), (1, 0)], color= rosa))
 # tela.add_Reta(Reta([(1, -1), (-1, 1)], color=vermelho))
 # tela.add_Reta(Reta([(-1,-0.5), (1,-0.5 )], color=branco))
-
-pontos_quad = [(0.8, -0.8), (0.8, -0.4), (0.4, -0.4), (0.4, -0.8)]  # quadrado
-pontos_hex = [(0.8, 0.4), (0.6, 0.6), (0.4, 0.6), (0.2, 0.4), (0.4, 0.2), (0.6, 0.2)]  # heaxagono
-pontos_triang = [(-0.2, -0.6), (-0.8, -0.4), (-0.8, -0.8)]  # triangulo
-pontos_pent = [(-0.2, 0.4), (-0.45, 0.6), (-0.8, 0.55), (-0.8, 0.25), (-0.45, 0.2)]  # pentagono
 
 triangulo = Poligono(pontos_triang, azul)
 quadrado = Poligono(pontos_quad, vermelho)
 hexagono = Poligono(pontos_hex, verde)
 pentagono = Poligono(pontos_pent, amarelo)
 
-# tela.add_Poligono(triangulo)
-# tela.add_Poligono(hexagono)
-# tela.add_Poligono(quadrado)
-# tela.add_Poligono(pentagono)
-
 quadrado.draw_poligono(myMatriz.matriz)
-triangulo.draw_poligono(myMatriz.matriz)
-hexagono.draw_poligono(myMatriz.matriz)
-pentagono.draw_poligono(myMatriz.matriz)
+# triangulo.draw_poligono(myMatriz.matriz)
+# hexagono.draw_poligono(myMatriz.matriz)
+# pentagono.draw_poligono(myMatriz.matriz)
 
 tela.draw_Tela(myMatriz.matriz)
 mostrar(myMatriz.matriz)
