@@ -6,12 +6,18 @@ import random
 
 # Inicilizando minha classe
 g = rt.Tela()
+pypxList = []
+
+def trocaDeTab(event):
+    rt.myMatriz.zerarMatriz()
+    g.lines.clear()
+    tkAux.set(value=0)
 
 def rasterize():
     points = transformToRetaList()
     g.draw_Tela(rt.myMatriz.matriz)
-    rt.mostrar(rt.myMatriz.matriz, px = [points[1],points[3]], py=[points[0], points[2]])
-    # print(points)
+    list_Px_Py = listPxPy()
+    rt.mostrar(rt.myMatriz.matriz, px = list_Px_Py[0], py= list_Px_Py[1])
 
 def adicionarReta(): 
     points = transformToRetaMatrix()
@@ -21,15 +27,52 @@ def adicionarReta():
     warningLabel.config(text = ' Reta número ' + str(aux) + ' adicionada')
     tkAux.set(value = aux)
     
+def listPxPy():
+    temp = transformListPoligono()
+    px = []
+    py = []
+    
+    for tupla in temp:
+        py.append(tupla[0])
+        px.append(tupla[1])
+    
+    px.append(temp[0][1])
+    py.append(temp[0][0])
+    print(px)
+    print(py)
+    return [px,py]
+    
+    
 def removerReta():
     g.remove_Reta()
     if tkAux.get() >= 1:
         aux = tkAux.get()
         warningLabel.config(text = 'Reta número ' + str(tkAux.get()) + ' removida')
         tkAux.set(value = aux - 1)
-        print("entrou")
     elif tkAux.get() <= 0:
         warningLabel.config(text = 'Não há reta para ser removida')
+
+def transformListPoligono():
+    temp = transformToRetaList()
+    listaDePontos = [(temp[i], temp[i+1]) for i in range(0, len(temp), 2)]
+    return listaDePontos
+
+def adicionarPoligonos():
+    points = transformListPoligono()
+    tempPoligono = rt.Poligono(points, (random.randint(0,255), random.randint(0,255), random.randint(0,255)))
+    g.add_Poligono(tempPoligono)
+    aux = tkAux.get() + 1
+    warningLabelPoligono.config(text = ' Poligono número ' + str(aux) + ' adicionado')
+    tkAux.set(value = aux)
+
+def removerPoligono():
+    if tkAux.get() >= 1:
+        g.remover_Poligono()
+        aux = tkAux.get()
+        warningLabelPoligono.config(text = 'Poligono número ' + str(tkAux.get()) + ' removido')
+        tkAux.set(value = aux - 1)
+    elif tkAux.get() <= 0:
+        warningLabelPoligono.config(text = 'Não há Poligono para ser removida')
 
 def transformToRetaMatrix():
     entry = tkEntryVar.get()
@@ -47,8 +90,8 @@ def transformToRetaMatrix():
     return toReturn
 
 def transformToRetaList():
-    entry = tkEntryVar.get()
-    temp1 = entry.split(";")
+    pypxList.append(tkEntryVar.get())
+    temp1 = pypxList[0].split(";")
     temp2 = []
     temp3 = []
     for i in range(len(temp1)):
@@ -76,7 +119,7 @@ tkAux = tk.IntVar(value = 0)
 # widgets
 notebook = ttk.Notebook(window)
 tab1 = ttk.Frame(notebook)
-tab2 = ttk.Frame(notebook)
+tab2 = ttk.Frame(notebook, )
 #TAB1
 titleLabel = ttk.Label(tab1, text = 'Rasterizar Retas', font = ("Comic Sans MS", 35, "bold"))
 inputFrame = ttk.Frame(tab1)
@@ -96,8 +139,8 @@ inputPoligono = ttk.Entry(inputFramePoligono, textvariable=tkEntryVar, justify='
 buttonFramePoligono = ttk.Frame(tab2)
 buttonLabelPoligono = ttk.Label(buttonFramePoligono, text = 'coloque valores entre -1 a 1', font = ("Calibri", 14, "italic"))
 addAndRemoveFramePoligono = ttk.Frame(buttonFramePoligono)
-buttonAddPoligono = ttk.Button(addAndRemoveFramePoligono, text = 'Adicionar Poligono !', command = adicionarReta)
-buttonRemovePoligono = ttk.Button(addAndRemoveFramePoligono, text = 'Remover Ultima Poligono !', command = removerReta)
+buttonAddPoligono = ttk.Button(addAndRemoveFramePoligono, text = 'Adicionar Poligono !', command = adicionarPoligonos)
+buttonRemovePoligono = ttk.Button(addAndRemoveFramePoligono, text = 'Remover Ultimo Poligono !', command = removerPoligono)
 buttonRasterizarPoligono = ttk.Button(buttonFramePoligono, text = 'Rasterize !',command = rasterize)
 warningLabelPoligono = ttk.Label(buttonFramePoligono, text = '')
 
@@ -152,4 +195,5 @@ warningLabelPoligono.grid(row = 0, sticky = 's')
 inputPoligono.grid(row = 0, sticky = 'sew', padx=150)
 
 # run
+notebook.bind("<<NotebookTabChanged>>", trocaDeTab)
 window.mainloop()

@@ -180,6 +180,11 @@ class Tela:
     # Adicionar Poligono
     def add_Poligono(self, polygon):
         self.polygons.append(polygon)
+    
+    # Remover Poligono
+    def remover_Poligono(self):
+        self.polygons.pop()
+        myMatriz.zerarMatriz()
 
     # Remover Reta
     def remove_Reta(self):
@@ -193,7 +198,7 @@ class Tela:
             linha.draw_Reta(matriz)
 
         for polygon in self.polygons:
-            polygon.draw_poligono(matriz, preencher=True)
+            polygon.draw_poligono(matriz)
 
 
 # Cor
@@ -244,3 +249,7 @@ tela = Tela()
 
 # tela.draw_Tela(myMatriz.matriz)
 # mostrar(myMatriz.matriz)
+
+# rt.myMatriz.zerarMatriz()
+# meuPoligono = rt.Poligono([[],[]], cor)
+# tela.add_Poligono(meuPoligono)
