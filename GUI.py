@@ -74,10 +74,13 @@ arrayCounter = tk.IntVar(value=0)
 tkAux = tk.IntVar(value = 0)
 
 # widgets
-titleLabel = ttk.Label(window, text = 'Rasterizar Retas', font = ("Comic Sans MS", 35, "bold"))
-inputFrame = ttk.Frame(window)
+notebook = ttk.Notebook(window)
+tab1 = ttk.Frame(notebook)
+tab2 = ttk.Frame(notebook)
+titleLabel = ttk.Label(tab1, text = 'Rasterizar Retas', font = ("Comic Sans MS", 35, "bold"))
+inputFrame = ttk.Frame(tab1)
 input = ttk.Entry(inputFrame, textvariable=tkEntryVar, justify='center')
-buttonFrame = ttk.Frame(window)
+buttonFrame = ttk.Frame(tab1)
 buttonLabel = ttk.Label(buttonFrame, text = 'coloque valores entre -1 a 1', font = ("Calibri", 14, "italic"))
 addAndRemoveFrame = ttk.Frame(buttonFrame)
 buttonAddReta = ttk.Button(addAndRemoveFrame, text = 'Adicionar Reta !', command = adicionarReta)
@@ -85,9 +88,14 @@ buttonRemoveReta = ttk.Button(addAndRemoveFrame, text = 'Remover Ultima Reta!', 
 buttonRasterizar = ttk.Button(buttonFrame, text = 'Rasterize !',command = rasterize)
 warningLabel = ttk.Label(buttonFrame, text = '')
 
+
+#add notebook
+notebook.add(tab1, text="Rasteriza Reta")
+notebook.add(tab2, text="Rasteriza Poligono")
+
 # define grid
 window.columnconfigure(0, weight = 1, uniform = 'a')
-window.rowconfigure((0,1,2), weight = 1)
+window.rowconfigure(0, weight = 1, uniform='a')
 inputFrame.columnconfigure(0, weight = 1)
 inputFrame.rowconfigure(0, weight = 1)
 buttonFrame.rowconfigure((0,1,2,3), weight = 1)
@@ -96,6 +104,7 @@ addAndRemoveFrame.rowconfigure(0, weight = 1, uniform = 'a')
 addAndRemoveFrame.columnconfigure((0,1), weight = 1)
 
 # grid
+notebook.grid(row=0, column=0, padx=10, pady=10)
 titleLabel.grid(row = 0, padx=100)
 inputFrame.grid(row = 1, sticky = 'nsew')
 buttonFrame.grid(row = 2, sticky = 'nsew')
