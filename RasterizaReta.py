@@ -31,7 +31,7 @@ class Matriz:
 myMatriz = Matriz()
 
 def mostrar(img, px, py):
-    fig, axs = plt.subplots(2, 3, figsize=(12, 8))
+    fig, axs = plt.subplots(2, 4, figsize=(12, 8))
     axs = axs.ravel()
 
     for i in range(len(myMatriz.matriz)):
@@ -44,6 +44,7 @@ def mostrar(img, px, py):
     plt.ylim([-1, 1])
 
     # plt.plot([x1,x2..,xn],[y1,y2...,yn])
+    fig.delaxes(axs[6])
     plt.plot(px,py)
 
     plt.show()
@@ -200,7 +201,12 @@ class Tela:
         for polygon in self.polygons:
             polygon.draw_poligono(matriz)
 
-
+def add_Resolution(resolution):
+    resolutions.append(resolution)
+    
+def remove_Resolution():
+    resolutions.pop()
+    
 # Cor
 azul = (0, 0, 255)
 vermelho = (255, 0, 0)

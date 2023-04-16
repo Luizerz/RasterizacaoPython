@@ -6,7 +6,6 @@ import random
 
 # Inicilizando minha classe
 g = rt.Tela()
-pypxList = []
 
 def trocaDeTab(event):
     rt.myMatriz.zerarMatriz()
@@ -14,7 +13,7 @@ def trocaDeTab(event):
     tkAux.set(value=0)
 
 def rasterize():
-    points = transformToRetaList()
+    print(rt.myMatriz.matriz)
     g.draw_Tela(rt.myMatriz.matriz)
     list_Px_Py = listPxPy()
     rt.mostrar(rt.myMatriz.matriz, px = list_Px_Py[0], py= list_Px_Py[1])
@@ -38,8 +37,6 @@ def listPxPy():
     
     px.append(temp[0][1])
     py.append(temp[0][0])
-    print(px)
-    print(py)
     return [px,py]
     
     
@@ -59,6 +56,7 @@ def transformListPoligono():
 
 def adicionarPoligonos():
     points = transformListPoligono()
+    # print(points)
     tempPoligono = rt.Poligono(points, (random.randint(0,255), random.randint(0,255), random.randint(0,255)))
     g.add_Poligono(tempPoligono)
     aux = tkAux.get() + 1
@@ -83,22 +81,19 @@ def transformToRetaMatrix():
         temp2.append(temp1[i].split(","))
     for i in range(len(temp2)):
         aux = temp2[i]
-        # print(aux)
         for j in aux:
             temp3.append(float(j))
     toReturn = [[temp3[0],temp3[1]],[temp3[2],temp3[3]]]
     return toReturn
 
 def transformToRetaList():
-    pypxList.append(tkEntryVar.get())
-    temp1 = pypxList[0].split(";")
+    temp1 = tkEntryVar.get().split(";")
     temp2 = []
     temp3 = []
     for i in range(len(temp1)):
         temp2.append(temp1[i].split(","))
     for i in range(len(temp2)):
         aux = temp2[i]
-        # print(aux)
         for j in aux:
             temp3.append(float(j))
     return temp3
